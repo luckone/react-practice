@@ -1,0 +1,108 @@
+.header {
+  position: relative;
+  z-index: 1001;
+  margin-bottom: rem(4);
+  &-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px $page-side-padding;
+  }
+  &-block {
+    width: 33.3%;
+    cursor: pointer;
+    &.logo {
+      color: $white;
+      font-size: rem(22);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+    &.user {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: rem(8) rem(16);
+        padding-right: 0;
+        white-space: nowrap;
+      }
+      &-img {
+        max-width: 35px;
+        max-height: 35px;
+        min-width: 35px;
+        min-height: 35px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: rem(8);
+      }
+      &-name {
+        color: $white;
+        width: 100%;
+        font-size: rem(12);
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+        &:hover {
+          color: $accent;
+        }
+      }
+    }
+    &__icon {
+      color: $white;
+      display: inline-block;
+      padding: rem(8) rem(16);
+      position: relative;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      svg {
+        font-size: rem(30);
+      }
+      &:hover {
+        color: $accent;
+      }
+      &.badged::before {
+        display: inline-block;
+        content: "";
+        width: 7px;
+        height: 7px;
+        background: $accent;
+        position: absolute;
+        top: 15px;
+        right: 22px;
+        border-radius: 50%;
+      }
+    }
+  }
+  &-github {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .header {
+    &-inner {
+      padding: 10px $page-side-padding-900;
+    }
+    &-block {
+      width: 50%;
+      &:first-child, &__icon {
+        display: none;
+      }
+      &.user {
+        &-img {
+          display: flex;
+        }
+        &-name {
+          display: none;
+        }
+      }
+    }
+  }
+}

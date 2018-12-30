@@ -1,0 +1,125 @@
+.playlist {
+  height: 100%;
+  background-color: $primary-bg;
+  width: 595px;
+  max-width: 100%;
+  z-index: 1200;
+  &-player {
+    padding: 40px;
+    position: relative;
+    background-color: $secondary-bg;
+    overflow: hidden;
+    cursor: pointer;
+    &__current {
+      display: flex;
+      align-items: flex-start;
+    }
+    &__img {
+      width: 33.3%;
+      max-width: 33.3%;
+      border-radius: 3px;
+      margin-bottom: rem(24);
+    }
+    &__bg {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(20px);
+      opacity: 0.2;
+      &--wrapp {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        z-index: 1;
+      }
+    }
+    &__details {
+      padding-left: 30px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      .flexed {
+        display: flex;
+      }
+      &--track {
+        color: $white;
+        font-size: rem(30);
+        font-weight: 700;
+        margin: rem(16) 0;
+      }
+      &--artist {
+        margin-bottom: rem(16);
+        font-size: rem(13);
+      }
+      &--options {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    &__control {
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+      margin-top: rem(12);
+      &--group {
+        width: 33.3%;
+        max-width: 33.3%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      &--slider {
+        padding-left: 30px;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        font-size: rem(13);
+        .general-time {
+          color: $white;
+        }
+      }
+      &--wrapp {
+        flex-grow: 1;
+        margin: 0 rem(8);
+      }
+    }
+    &__icon {
+      color: $white;
+      margin-left: rem(16);
+      transition: all .3s ease-in-out;
+      &:first-child {
+        margin: 0;
+      }
+      &:hover {
+        color: $accent;
+      }
+      &.control {
+        color: $white;
+        svg {
+          font-size: rem(34);
+        }
+        &:hover {
+          color: $accent;
+        }
+        &-play {
+          color: $white;
+          svg {
+            font-size: rem(38);
+          }
+          &:hover {
+            color: $accent;
+          }
+        }
+      }
+    }
+  }
+}

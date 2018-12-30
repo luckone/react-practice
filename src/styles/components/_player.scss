@@ -1,0 +1,127 @@
+.player {
+  background-color: $secondary-bg;
+  width: 100vw;
+  z-index: 1001;
+  &-inner {
+    padding: 0 $page-side-padding;
+    padding-top: rem(16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__block {
+      width: 33.3%;
+      cursor: pointer;
+      &.flexed {
+        display: flex;
+        align-items: flex-start;
+      }
+      &--slider {
+        width: 110px;
+      }
+      &--info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        white-space: nowrap;
+        &.img {
+          max-width: 40px;
+          max-height: 40px;
+          min-width: 40px;
+          margin-right: rem(16);
+          object-fit: cover;
+          border-radius: 3px;
+        }
+        &.track {
+          font-weight: 500;
+          color: $white;
+          font-size: rem(16);
+          margin-bottom: rem(4);
+        }
+      }
+      &--control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      &--options {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      &--timer {
+        display: flex;
+        font-size: rem(12);
+        opacity: .7;
+        margin-right: rem(20);
+        .general-time {
+          color: $white;
+        }
+      }
+      &--icon {
+        padding: 0 rem(8);
+        display: flex;
+        align-items: center;
+        transition: all .3s ease-in-out;
+        &:hover {
+          color: $accent;
+        }
+        svg {
+          font-size: rem(20);
+        }
+        &.menu {
+          margin-right: rem(20);
+        }
+        &.average {
+          color: $white;
+          svg {
+            font-size: rem(24);
+          }
+          &:hover {
+            color: $accent;
+          }
+        }
+        &.accent {
+          color: $white;
+          svg {
+            font-size: rem(34);
+          }
+          &:hover {
+            color: $accent;
+          }
+          &-play {
+            color: $white;
+            svg {
+              font-size: rem(38);
+            }
+            &:hover {
+              color: $accent;
+            }
+          }
+        }
+      }
+    }
+  }
+  &-slider {
+    padding-top: 22px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .player {
+    &-inner {
+      padding: 10px $page-side-padding-900;
+      justify-content: center;
+      &__block {
+        &:first-child, &:last-child {
+          display: none;
+        }
+        &--timer {
+          display: none;
+        }
+      }
+    }
+    &-slider {
+      padding-top: 11px;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+// ------------------
+// COLORS
+// ------------------
+
+$white: #FFFFFF;
+$gray-100: #F5F5F5;
+$black: #000000;
+
+$accent: #b08cf9;
+$secondary-accent: #91a5f4;
+$gradient: linear-gradient(135deg, $secondary-accent 0%, $accent 86%);
+
+$primary: #5767DA;
+$success: #76AB3C;
+$info:    #4FB5DD;
+$warning: #F69F00;
+$danger:  #F04E51;
+
+$primary-bg: #151412;
+$secondary-bg: #2a2824;
+
+$border-color: rgba(#DCDEE3, .8);
+
+$text-primary: #b8babc;
+$text-secondary: #9a9a9a;
+
+// ------------------
+// FONTS
+// ------------------
+
+$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+sans-serif;
+$font-secondary: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+monospace;
+
+// ------------------
+// LAYOUT
+// ------------------
+
+$page-side-padding: 50px;
+$page-side-padding-900: 20px

@@ -1,11 +1,16 @@
 {
-  "name": "hello-world",
+  "name": "valentor-music",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.7.1",
+    "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.26",
+    "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-scripts": "2.1.2"
+    "react-scripts": "2.1.2",
+    "sass-loader": "^7.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

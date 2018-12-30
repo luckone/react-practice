@@ -1,0 +1,29 @@
+@import 'import';
+@import 'variables';
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-primary;
+  color: $text-primary;
+  background-color: $primary-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+code {
+  font-family: $font-secondary;
+}
+
+svg {
+  fill: currentColor;
+}
+
+p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

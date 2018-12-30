@@ -1,0 +1,52 @@
+.tabs {
+  padding: rem(48) $page-side-padding 0;
+  margin-bottom: rem(48);
+  &-wrapper {
+    background-color: $secondary-bg;
+    min-height: 60px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    text-align: center;
+    border-right: 1px solid #000;
+    white-space: nowrap;
+    cursor: pointer;
+    position: relative;
+    font-size: rem(18);
+    z-index: 1000;
+    &:last-child {
+      border-right: none;
+    }
+    &:after {
+      content: '';
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      height: 0;
+      z-index: -1;
+      opacity: 0;
+      background: $gradient;
+      transition: all 0.4s ease-in-out;
+    }
+    &.active {
+      color: $white;
+      &:after {
+        opacity: 1;
+        height: 100%;
+      }
+    }
+  }
+}
