@@ -13,7 +13,7 @@ const Tab = (props) => {
     )
 };
 
-class tabsComponent extends React.Component {
+class TabsComponent extends React.Component {
     state = {
         chosenTab: 2,
         pages: [
@@ -62,4 +62,4 @@ class tabsComponent extends React.Component {
     }
 };
 
-export default tabsComponent;
+export default TabsComponent;

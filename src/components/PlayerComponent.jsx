@@ -13,6 +13,8 @@ import MenuIcon from '@material-ui/icons/QueueMusic';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import * as globalActions from '../store/actions/globalActions';
 
 const SliderItem = withStyles({
     track: {
@@ -24,7 +26,7 @@ const SliderItem = withStyles({
     }
 })(Slider);
 
-class playerComponent extends React.Component {
+class PlayerComponent extends React.Component {
     state = {
         value: 50,
         volume: 32,
@@ -49,6 +51,7 @@ class playerComponent extends React.Component {
 
     render () {
         const { value, volume, menu } = this.state;
+        console.log(this.props.toggleDrawer);
         return (
             <div className="player">
                 <div className="player-inner">
@@ -72,8 +75,7 @@ class playerComponent extends React.Component {
                                     id="simple-menu"
                                     anchorEl={menu}
                                     open={Boolean(menu)}
-                                    onClose={this.handleMoreClose}
-                                >
+                                    onClose={this.handleMoreClose}>
                                     <MenuItem onClick={this.handleMoreClose}>Like</MenuItem>
                                     <MenuItem onClick={this.handleMoreClose}>Share</MenuItem>
                                     <MenuItem onClick={this.handleMoreClose}>Add to playlist</MenuItem>
@@ -107,7 +109,7 @@ class playerComponent extends React.Component {
                                 <div className="general-time">02:43</div>
                             </div>
                             <div className="player-inner__block--icon menu average">
-                                <MenuIcon></MenuIcon>
+                                <MenuIcon onClick={this.props.toggleDrawer}></MenuIcon>
                             </div>
                             <div className="player-inner__block--icon menu average">
                                 <VolumeIcon></VolumeIcon>
@@ -130,6 +132,15 @@ class playerComponent extends React.Component {
             </div>
         )
     }
+}
+
+const mapStateToProps = (state) => {
+    return {}
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleDrawer: () => dispatch(globalActions.toggleDrawer())
+    }
 };
 
-export default playerComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerComponent);

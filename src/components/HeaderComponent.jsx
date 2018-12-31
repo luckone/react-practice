@@ -4,7 +4,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 import SearchIcon from '@material-ui/icons/Search'
 import UserAvatarImg from "../assets/test.jpg";
 
-class headerComponent extends React.Component {
+class HeaderComponent extends React.Component {
     render () {
         return (
             <header className="header">
@@ -35,4 +35,4 @@ class headerComponent extends React.Component {
     }
 };
 
-export default headerComponent;
+export default HeaderComponent;

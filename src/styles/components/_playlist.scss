@@ -1,14 +1,19 @@
 .playlist {
-  height: 100%;
+  height: 100vh;
+  overflow: hidden;
   background-color: $primary-bg;
   width: 595px;
   max-width: 100%;
   z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  .flexed {
+    display: flex;
+  }
   &-player {
     padding: 40px;
     position: relative;
     background-color: $secondary-bg;
-    overflow: hidden;
     cursor: pointer;
     &__current {
       display: flex;
@@ -45,9 +50,6 @@
       width: 100%;
       position: relative;
       z-index: 10;
-      .flexed {
-        display: flex;
-      }
       &--track {
         color: $white;
         font-size: rem(30);
@@ -119,6 +121,48 @@
             color: $accent;
           }
         }
+      }
+    }
+  }
+  &-list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    position: relative;
+    padding: 40px;
+    margin-bottom: 0;
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      &:after {
+        display: block;
+        clear: both;
+        content: "";
+      }
+      &--info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 25px;
+      }
+      &--track {
+        font-size: rem(16);
+        color: $white;
+        margin-bottom: rem(4);
+      }
+      &--artist, &--time {
+        font-size: rem(13);
+      }
+      &--img {
+        min-width: 50px;
+        max-width: 50px;
+        min-height: 50px;
+        max-height: 50px;
+        margin-right: 15px;
+        border-radius: 3px;
+        object-fit: cover;
       }
     }
   }
