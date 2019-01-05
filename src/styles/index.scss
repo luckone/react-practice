@@ -50,3 +50,8 @@ li {
     transform: scale(0.97);
   }
 }
+
+.page {
+  padding: 0 $page-side-padding;
+  min-height: 50vh;
+}
