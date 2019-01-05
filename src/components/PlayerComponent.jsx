@@ -51,7 +51,6 @@ class PlayerComponent extends React.Component {
 
     render () {
         const { value, volume, menu } = this.state;
-        console.log(this.props.toggleDrawer);
         return (
             <div className="player">
                 <div className="player-inner">

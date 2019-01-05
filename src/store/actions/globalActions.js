@@ -5,3 +5,9 @@ export const toggleDrawer = () => {
         type: globalActionType.TOGGLE_DRAWER
     }
 }
+
+export const toggleSearch = () => {
+    return {
+        type: globalActionType.TOGGLE_SEARCH
+    }
+}

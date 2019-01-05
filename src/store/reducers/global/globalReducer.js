@@ -9,6 +9,11 @@ const globalReducer = (state = globalState, action) => {
                 ...state,
                 showDrawer: !state.showDrawer,
             };
+        case globalActionType.TOGGLE_SEARCH:
+            return {
+                ...state,
+                showSearch: !state.showSearch,
+            };
         default: return state;
     }
 };

@@ -41,3 +41,12 @@ li {
   clear: both;
   position: relative;
 }
+
+.app-wrapper {
+  min-height: 100vh;
+  transform: scale(1);
+  transition: all .3s ease-in-out;
+  &.contained {
+    transform: scale(0.97);
+  }
+}

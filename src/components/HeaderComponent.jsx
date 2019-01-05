@@ -3,6 +3,8 @@ import GithubLogo from "../assets/GitHub-Mark-Light-120px-plus.png";
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 import SearchIcon from '@material-ui/icons/Search'
 import UserAvatarImg from "../assets/test.jpg";
+import { connect } from "react-redux";
+import * as globalActions from "../store/actions/globalActions";
 
 class HeaderComponent extends React.Component {
     render () {
@@ -18,7 +20,7 @@ class HeaderComponent extends React.Component {
                         Valentor's Music
                     </div>
                     <div className="header-block user">
-                        <div className="header-block__icon">
+                        <div className="header-block__icon" onClick={this.props.toggleSearch}>
                             <SearchIcon />
                         </div>
                         <div className="header-block__icon badged">
@@ -35,4 +37,16 @@ class HeaderComponent extends React.Component {
     }
 };
 
-export default HeaderComponent;
+const mapStateToProps = (state) => {
+    return {
+        searchStatus: state.global.showSearch,
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleSearch: () => dispatch(globalActions.toggleSearch())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
