@@ -1,5 +1,17 @@
+.title {
+  font-size: rem(20);
+  font-weight: 600;
+  color: $white;
+  &__box {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .top {
   display: flex;
+  margin-bottom: 40px;
   &-card {
     margin-right: rem(16);
     width: 33.3%;

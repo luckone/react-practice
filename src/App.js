@@ -60,6 +60,9 @@ class App extends Component {
                             </div>
                         </div>
                     </div>
+                      <div className="title__box">
+                          <h3 className="title">Top songs</h3>
+                      </div>
                   </main>
                 {/*<LoadingComponent/>*/}
             </div>

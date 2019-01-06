@@ -16,6 +16,7 @@ import {withStyles} from "@material-ui/core";
 import Slider from "@material-ui/lab/Slider/Slider";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import * as globalActions from "../store/actions/globalActions";
+import * as playlistActions from "../store/actions/playlistActions";
 
 const SliderItem = withStyles({
     track: {
@@ -31,6 +32,15 @@ const SliderItem = withStyles({
 class DrawerPlayerComponent extends React.Component {
     state = {
         value: 74,
+        track: {
+            id: 1,
+            artist: 'Boney M',
+            thumbnail: 'https://s.inyourpocket.com/img/figure/2018-09/boney-mania-carles.jpg',
+            track: {
+                mp3: '../storage/boney-m-rasputin.mp3',
+                name: 'Rasputin',
+            },
+        },
     };
 
     handleChange = (event, value) => {
@@ -44,18 +54,28 @@ class DrawerPlayerComponent extends React.Component {
     handleMoreClose = () => {
     };
 
+    setPlaying = (trackData) => {
+        this.props.setTrack(trackData);
+        const audio = new Audio(trackData.track.mp3);
+        audio.autoplay = true;
+        audio.onloadedmetadata = () => {
+            this.props.setAudio(audio);
+            this.props.setAudioDuration(audio.duration);
+        }
+    };
+
     render () {
-        const { value, menu } = this.state;
+        const { value, menu, track } = this.state;
         return (
             <Drawer anchor="right" open={this.props.drawerStatus} onClose={this.props.toggleDrawer}>
                 <div className="playlist">
                     <div className="playlist-player">
                         <div className="playlist-player__info">
                             <div className="playlist-player__current">
-                                <img src={AlbumImg} alt="" className="playlist-player__img"/>
+                                <img src={track.thumbnail} alt="" className="playlist-player__img"/>
                                 <div className="playlist-player__details">
-                                    <p className="playlist-player__details--track">Bank Account</p>
-                                    <p className="playlist-player__details--artist">21 Savage</p>
+                                    <p className="playlist-player__details--track">{track.track.name}</p>
+                                    <p className="playlist-player__details--artist">{track.artist}</p>
                                     <div className="playlist-player__details--options">
                                         <div className="flexed">
                                             <div className="playlist-player__icon">
@@ -90,7 +110,7 @@ class DrawerPlayerComponent extends React.Component {
                                     <div className="playlist-player__icon control">
                                         <PreviousIcon/>
                                     </div>
-                                    <div className="playlist-player__icon control-play">
+                                    <div className="playlist-player__icon control-play" onClick={() => this.setPlaying(track)}>
                                         <PlayIcon/>
                                     </div>
                                     <div className="playlist-player__icon control">
@@ -98,11 +118,15 @@ class DrawerPlayerComponent extends React.Component {
                                     </div>
                                 </div>
                                 <div className="playlist-player__control--slider">
-                                    <p className="current-time">00:43</p>
+                                    <p className="current-time">
+                                        {this.props.playlist.audio ? this.props.playlist.audio.currentTime : '00:00'}
+                                    </p>
                                     <div className="playlist-player__control--wrapp">
                                         <SliderItem value={value} onChange={this.handleChange}/>
                                     </div>
-                                    <p className="general-time">01:12</p>
+                                    <p className="general-time">
+                                        {this.props.playlist.duration ? this.props.playlist.duration : '00:00'}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -147,12 +171,16 @@ class DrawerPlayerComponent extends React.Component {
 const mapStateToProps = (state) => {
     return {
         drawerStatus: state.global.showDrawer,
+        playlist: state.playlist,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleDrawer: () => dispatch(globalActions.toggleDrawer())
+        toggleDrawer: () => dispatch(globalActions.toggleDrawer()),
+        setTrack: (track) => dispatch(playlistActions.setTrack(track)),
+        setAudio: (mp3) => dispatch(playlistActions.setAudio(mp3)),
+        setAudioDuration: (seconds) => dispatch(playlistActions.setAudioDuration(seconds)),
     }
 };
 
