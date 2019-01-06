@@ -60,10 +60,3 @@ export const setTimeTickInterval = (interval) => {
         payload: interval,
     }
 };
-
-export const unsetTimeTickInterval = () => {
-    return {
-        type: playlistActionType.SET_TIME_TICK_INTERVAL,
-        payload: null,
-    }
-};

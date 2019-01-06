@@ -225,7 +225,7 @@ const mapDispatchToProps = (dispatch) => {
         setCurrentTime: (seconds) => dispatch(playlistActions.setAudioCurrentTime(seconds)),
         resetAudioCurrentTime: (seconds) => dispatch(playlistActions.resetAudioCurrentTime(seconds)),
         setTimeTick: (interval) => dispatch(playlistActions.setTimeTickInterval(interval)),
-        unsetTimeTick: () => dispatch(playlistActions.unsetTimeTickInterval()),
+        unsetTimeTick: () => dispatch(playlistActions.setTimeTickInterval(null)),
     }
 };
 
