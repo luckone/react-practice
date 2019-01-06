@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from 'react-redux';
-import AlbumImg from "../assets/pic.jpeg";
 import Drawer from '@material-ui/core/Drawer';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 import NextIcon from '@material-ui/icons/FastForward';
@@ -9,6 +8,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import ReplayIcon from '@material-ui/icons/Replay';
+import PauseIcon from '@material-ui/icons/Pause';
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Menu from "@material-ui/core/Menu/Menu";
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -17,6 +17,7 @@ import Slider from "@material-ui/lab/Slider/Slider";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import * as globalActions from "../store/actions/globalActions";
 import * as playlistActions from "../store/actions/playlistActions";
+import moment from "moment";
 
 const SliderItem = withStyles({
     track: {
@@ -28,23 +29,40 @@ const SliderItem = withStyles({
     }
 })(Slider);
 
+const TrackItem = (props) => {
+    const classes = ['playlist-list__item'];
+
+    if (props.active) classes.push('active');
+    return (
+        <li className={classes.join(' ')} onClick={props.handleSelect}>
+            <div className="playlist-list__item--info">
+                <div className="flexed">
+                    <img src={props.track.thumbnail} alt="" className="playlist-list__item--img"/>
+                    <div>
+                        <p className="playlist-list__item--track">{props.track.track.name}</p>
+                        <p className="playlist-list__item--artist">{props.track.artist}</p>
+                    </div>
+                </div>
+                <div className="playlist-list__item--time">{props.duration}</div>
+            </div>
+        </li>
+    )
+};
 
 class DrawerPlayerComponent extends React.Component {
     state = {
-        value: 74,
-        track: {
-            id: 1,
-            artist: 'Boney M',
-            thumbnail: 'https://s.inyourpocket.com/img/figure/2018-09/boney-mania-carles.jpg',
-            track: {
-                mp3: '../storage/boney-m-rasputin.mp3',
-                name: 'Rasputin',
-            },
-        },
+        sliderTimeValue: 0,
+        menu: null,
     };
 
     handleChange = (event, value) => {
-        this.setState({ value });
+        this.setState({ sliderTimeValue: value });
+    };
+
+    handleDragStop = (value) => {
+        this.props.unsetTimeTick();
+        this.props.resetAudioCurrentTime(value);
+        this.initTimeTick(this.props.audio);
     };
 
     handleMoreClick = event => {
@@ -52,30 +70,60 @@ class DrawerPlayerComponent extends React.Component {
     };
 
     handleMoreClose = () => {
+        this.setState({ menu: null });
+    };
+
+    initTimeTick = (audio) => {
+        this.props.setTimeTick(
+            setInterval(() => {
+                this.props.setCurrentTime(audio.currentTime);
+                this.setState({sliderTimeValue: audio.currentTime})
+            }, 500)
+        );
     };
 
     setPlaying = (trackData) => {
         this.props.setTrack(trackData);
         const audio = new Audio(trackData.track.mp3);
         audio.autoplay = true;
+        audio.onplay = () => {
+            this.initTimeTick(audio);
+        };
+        audio.onpause = () => {
+            this.props.unsetTimeTick();
+        };
+        audio.onended = () => {
+            this.props.unsetTimeTick();
+        };
         audio.onloadedmetadata = () => {
             this.props.setAudio(audio);
             this.props.setAudioDuration(audio.duration);
-        }
+        };
+    };
+
+    trackList = () => {
+        return this.props.tracks.map(track => {
+            return (
+                <TrackItem
+                    track={track}
+                    key={track.id}
+                    handleSelect={() => this.setPlaying(track)}/>
+            );
+        })
     };
 
     render () {
-        const { value, menu, track } = this.state;
+        const { sliderTimeValue, menu } = this.state;
         return (
             <Drawer anchor="right" open={this.props.drawerStatus} onClose={this.props.toggleDrawer}>
                 <div className="playlist">
                     <div className="playlist-player">
                         <div className="playlist-player__info">
                             <div className="playlist-player__current">
-                                <img src={track.thumbnail} alt="" className="playlist-player__img"/>
+                                <img src={this.props.currentTrack.thumbnail} alt="" className="playlist-player__img"/>
                                 <div className="playlist-player__details">
-                                    <p className="playlist-player__details--track">{track.track.name}</p>
-                                    <p className="playlist-player__details--artist">{track.artist}</p>
+                                    <p className="playlist-player__details--track">{this.props.currentTrack.track.name}</p>
+                                    <p className="playlist-player__details--artist">{this.props.currentTrack.artist}</p>
                                     <div className="playlist-player__details--options">
                                         <div className="flexed">
                                             <div className="playlist-player__icon">
@@ -107,11 +155,15 @@ class DrawerPlayerComponent extends React.Component {
                             </div>
                             <div className="playlist-player__control">
                                 <div className="playlist-player__control--group">
-                                    <div className="playlist-player__icon control">
+                                    <div className="playlist-player__icon control" onClick={this.initAudioEnd}>
                                         <PreviousIcon/>
                                     </div>
-                                    <div className="playlist-player__icon control-play" onClick={() => this.setPlaying(track)}>
-                                        <PlayIcon/>
+                                    <div
+                                        className="playlist-player__icon control-play"
+                                        onClick={() => this.props.togglePlay()}>
+                                        {this.props.paused ? <PlayIcon/> : <PauseIcon/>}
+                                        {/*<PlayIcon/>*/}
+
                                     </div>
                                     <div className="playlist-player__icon control">
                                         <NextIcon/>
@@ -119,47 +171,29 @@ class DrawerPlayerComponent extends React.Component {
                                 </div>
                                 <div className="playlist-player__control--slider">
                                     <p className="current-time">
-                                        {this.props.playlist.audio ? this.props.playlist.audio.currentTime : '00:00'}
+                                        {this.props.audio ? this.props.currentTime : '00:00'}
                                     </p>
                                     <div className="playlist-player__control--wrapp">
-                                        <SliderItem value={value} onChange={this.handleChange}/>
+                                        <SliderItem
+                                            max={this.props.currentTrackDurationRaw}
+                                            value={sliderTimeValue}
+                                            onChange={this.handleChange}
+                                            onDragEnd={() => this.handleDragStop(sliderTimeValue)}/>
                                     </div>
                                     <p className="general-time">
-                                        {this.props.playlist.duration ? this.props.playlist.duration : '00:00'}
+                                        {this.props.currentTrackDuration ? this.props.currentTrackDuration : '00:00'}
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div className="playlist-player__bg--wrapp">
-                            <div className="playlist-player__bg" style={{backgroundImage: `url(${AlbumImg})`}}/>
+                            <div className="playlist-player__bg"
+                                 style={{backgroundImage: `url(${this.props.currentTrack.thumbnail})`}}/>
                         </div>
                     </div>
                     <PerfectScrollbar className="playlist-list">
                         <ul>
-                            <li className="playlist-list__item">
-                                <div className="playlist-list__item--info">
-                                    <div className="flexed">
-                                        <img src={AlbumImg} alt="" className="playlist-list__item--img"/>
-                                        <div>
-                                            <p className="playlist-list__item--track">Bank Account</p>
-                                            <p className="playlist-list__item--artist">21 Savage</p>
-                                        </div>
-                                    </div>
-                                    <div className="playlist-list__item--time">01:12</div>
-                                </div>
-                            </li>
-                            <li className="playlist-list__item">
-                                <div className="playlist-list__item--info">
-                                    <div className="flexed">
-                                        <img src={AlbumImg} alt="" className="playlist-list__item--img"/>
-                                        <div>
-                                            <p className="playlist-list__item--track">Bank Account</p>
-                                            <p className="playlist-list__item--artist">21 Savage</p>
-                                        </div>
-                                    </div>
-                                    <div className="playlist-list__item--time">01:12</div>
-                                </div>
-                            </li>
+                            {this.trackList()}
                         </ul>
                     </PerfectScrollbar>
                 </div>
@@ -171,16 +205,27 @@ class DrawerPlayerComponent extends React.Component {
 const mapStateToProps = (state) => {
     return {
         drawerStatus: state.global.showDrawer,
-        playlist: state.playlist,
+        audio: state.playlist.audio,
+        tracks: state.playlist.currentPlaylist,
+        paused: state.playlist.paused,
+        currentTrack: state.playlist.currentTrack,
+        currentTrackDurationRaw: state.playlist.duration,
+        currentTrackDuration: moment.utc(state.playlist.duration*1000).format('mm:ss'),
+        currentTime: moment.utc(state.playlist.time*1000).format('mm:ss')
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleDrawer: () => dispatch(globalActions.toggleDrawer()),
+        togglePlay: () => dispatch(playlistActions.togglePlay()),
         setTrack: (track) => dispatch(playlistActions.setTrack(track)),
         setAudio: (mp3) => dispatch(playlistActions.setAudio(mp3)),
         setAudioDuration: (seconds) => dispatch(playlistActions.setAudioDuration(seconds)),
+        setCurrentTime: (seconds) => dispatch(playlistActions.setAudioCurrentTime(seconds)),
+        resetAudioCurrentTime: (seconds) => dispatch(playlistActions.resetAudioCurrentTime(seconds)),
+        setTimeTick: (interval) => dispatch(playlistActions.setTimeTickInterval(interval)),
+        unsetTimeTick: () => dispatch(playlistActions.unsetTimeTickInterval()),
     }
 };
 

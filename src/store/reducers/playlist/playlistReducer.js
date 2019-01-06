@@ -1,6 +1,5 @@
 import playlistState from './playlistState';
 import playlistActionType from '../../../constants/playlistActionType';
-import moment from 'moment';
 
 const playlistReducer = (state = playlistState, action) => {
     switch (action.type) {
@@ -15,7 +14,6 @@ const playlistReducer = (state = playlistState, action) => {
                 currentTrack: action.payload,
             };
         case playlistActionType.SET_PLAYING_AUDIO:
-            console.log(action.payload.duration);
             if (state.audio) {
                 state.audio.pause();
                 state.audio = null;
@@ -23,19 +21,42 @@ const playlistReducer = (state = playlistState, action) => {
             return {
                 ...state,
                 audio: action.payload,
+                paused: false,
             };
+        case playlistActionType.TOGGLE_PLAY:
+            if (state.audio) {
+                state.paused ? state.audio.play() : state.audio.pause();
+                return {
+                    ...state,
+                    paused: !state.paused,
+                };
+            } else return {...state};
         case playlistActionType.SET_AUDIO_VOLUME:
             return {
                 ...state,
                 volume: action.payload,
             };
         case playlistActionType.SET_PLAYING_AUDIO_DURATION:
-            const seconds = action.payload;
-            const duration = moment.utc(seconds*1000).format('mm:ss');
-            console.log(duration);
             return {
                 ...state,
-                duration: duration,
+                duration: action.payload,
+            };
+        case playlistActionType.SET_PLAYING_AUDIO_TIME:
+            return {
+                ...state,
+                time: action.payload,
+            };
+        case playlistActionType.RESET_PLAYING_AUDIO_TIME:
+            if (state.audio) state.audio.currentTime = action.payload;
+            return {
+                ...state,
+                time: action.payload,
+            };
+        case playlistActionType.SET_TIME_TICK_INTERVAL:
+            if (!action.payload) clearInterval(state.timeInterval);
+            return {
+                ...state,
+                timeInterval: action.payload,
             };
         default: return state;
     }

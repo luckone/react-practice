@@ -1,5 +1,11 @@
 import playlistActionType from '../../constants/playlistActionType';
 
+export const togglePlay = () => {
+    return {
+        type: playlistActionType.TOGGLE_PLAY,
+    }
+};
+
 export const setPlaylist = (playlist) => {
     return {
         type: playlistActionType.SET_PLAYLIST,
@@ -12,6 +18,7 @@ export const setVolume = (audio) => {
         payload: audio.volume,
     }
 };
+
 export const setTrack = (trackData) => {
     return {
         type: playlistActionType.SET_CURRENT_TRACK,
@@ -33,3 +40,30 @@ export const setAudioDuration = (time) => {
     }
 };
 
+export const setAudioCurrentTime = (time) => {
+    return {
+        type: playlistActionType.SET_PLAYING_AUDIO_TIME,
+        payload: time,
+    }
+};
+
+export const resetAudioCurrentTime = (time) => {
+    return {
+        type: playlistActionType.RESET_PLAYING_AUDIO_TIME,
+        payload: time
+    }
+};
+
+export const setTimeTickInterval = (interval) => {
+    return {
+        type: playlistActionType.SET_TIME_TICK_INTERVAL,
+        payload: interval,
+    }
+};
+
+export const unsetTimeTickInterval = () => {
+    return {
+        type: playlistActionType.SET_TIME_TICK_INTERVAL,
+        payload: null,
+    }
+};
