@@ -1,5 +1,4 @@
 import React from "react";
-import AlbumImg from "../assets/pic.jpeg";
 import Slider from '@material-ui/lab/Slider';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -15,6 +14,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import * as globalActions from '../store/actions/globalActions';
+import moment from "moment";
+import * as playlistActions from "../store/actions/playlistActions";
 
 const SliderItem = withStyles({
     track: {
@@ -28,16 +29,32 @@ const SliderItem = withStyles({
 
 class PlayerComponent extends React.Component {
     state = {
-        value: 50,
-        volume: 32,
+        sliderTimeValue: 0,
+        volume: 30,
         menu: null,
     };
 
-    handleChange = (event, value) => {
-        this.setState({ value });
+    handleSliderChange = (event, value) => {
+        this.setState({ sliderTimeValue: value });
+    };
+
+    handleSliderDragStop = (value) => {
+        this.props.unsetTimeTick();
+        this.props.resetAudioCurrentTime(value);
+        this.initTimeTick(this.props.audio);
+    };
+
+    initTimeTick = (audio) => {
+        this.props.setTimeTick(
+            setInterval(() => {
+                this.props.setCurrentTime(audio.currentTime);
+                this.setState({sliderTimeValue: audio.currentTime})
+            }, 500)
+        );
     };
 
     handleChangeVolume = (event, volume) => {
+        this.props.setVolume(volume / 100);
         this.setState({ volume });
     };
 
@@ -50,17 +67,17 @@ class PlayerComponent extends React.Component {
     };
 
     render () {
-        const { value, volume, menu } = this.state;
+        const { sliderTimeValue, volume, menu } = this.state;
         return (
             <div className="player">
                 <div className="player-inner">
                     <div className="player-inner__block">
                         <div className="player-inner__block--info">
                             <div className="player-inner__block flexed">
-                                <img src={AlbumImg} alt="" className="player-inner__block--info img"/>
+                                <img src={this.props.currentTrack.thumbnail} alt="" className="player-inner__block--info img"/>
                                 <div>
-                                    <div className="player-inner__block--info track">Bank Account</div>
-                                    <p className="player-inner__block--info artist">21 Savage</p>
+                                    <div className="player-inner__block--info track">{this.props.currentTrack.track.name}</div>
+                                    <p className="player-inner__block--info artist">{this.props.currentTrack.artist}</p>
                                 </div>
                             </div>
                             <div className="player-inner__block flexed">
@@ -104,8 +121,8 @@ class PlayerComponent extends React.Component {
                     <div className="player-inner__block">
                         <div className="player-inner__block--options">
                             <div className="player-inner__block--timer">
-                                <div className="current-time">00:00&nbsp;</div>
-                                <div className="general-time">02:43</div>
+                                <div className="current-time">{this.props.currentTime}&nbsp;</div>
+                                <div className="general-time">{this.props.currentTrackDuration}</div>
                             </div>
                             <div className="player-inner__block--icon menu average">
                                 <MenuIcon onClick={this.props.toggleDrawer}></MenuIcon>
@@ -116,6 +133,7 @@ class PlayerComponent extends React.Component {
                             <div className="player-inner__block--slider">
                                 <SliderItem
                                     value={volume}
+                                    max={100}
                                     onChange={this.handleChangeVolume}
                                 />
                             </div>
@@ -124,9 +142,10 @@ class PlayerComponent extends React.Component {
                 </div>
                 <div className="player-slider">
                     <SliderItem
-                        value={value}
-                        onChange={this.handleChange}
-                    />
+                        max={this.props.currentTrackDurationRaw}
+                        value={sliderTimeValue}
+                        onChange={this.handleSliderChange}
+                        onDragEnd={() => this.handleSliderDragStop(sliderTimeValue)}/>
                 </div>
             </div>
         )
@@ -134,11 +153,31 @@ class PlayerComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        drawerStatus: state.global.showDrawer,
+        audio: state.playlist.audio,
+        volume: state.playlist.volume,
+        tracks: state.playlist.currentPlaylist,
+        paused: state.playlist.paused,
+        currentTrack: state.playlist.currentTrack,
+        currentTrackDurationRaw: state.playlist.duration,
+        currentTrackDuration: moment.utc(state.playlist.duration*1000).format('mm:ss'),
+        currentTime: moment.utc(state.playlist.time*1000).format('mm:ss')
+    }
 };
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleDrawer: () => dispatch(globalActions.toggleDrawer())
+        toggleDrawer: () => dispatch(globalActions.toggleDrawer()),
+        togglePlay: () => dispatch(playlistActions.togglePlay()),
+        setTrack: (track) => dispatch(playlistActions.setTrack(track)),
+        setAudio: (mp3) => dispatch(playlistActions.setAudio(mp3)),
+        setVolume: (volume) => dispatch(playlistActions.setVolume(volume)),
+        setAudioDuration: (seconds) => dispatch(playlistActions.setAudioDuration(seconds)),
+        setCurrentTime: (seconds) => dispatch(playlistActions.setAudioCurrentTime(seconds)),
+        resetAudioCurrentTime: (seconds) => dispatch(playlistActions.resetAudioCurrentTime(seconds)),
+        setTimeTick: (interval) => dispatch(playlistActions.setTimeTickInterval(interval)),
+        unsetTimeTick: () => dispatch(playlistActions.setTimeTickInterval(null)),
     }
 };
 

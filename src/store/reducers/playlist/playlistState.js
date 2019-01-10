@@ -40,6 +40,7 @@ let playlistState = {
     audio: null,
     duration: 0,
     time: 0,
+    volume: 0.3,
     timeInterval: null,
     paused: true,
 };

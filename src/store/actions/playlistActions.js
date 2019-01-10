@@ -12,10 +12,10 @@ export const setPlaylist = (playlist) => {
         payload: playlist
     }
 };
-export const setVolume = (audio) => {
+export const setVolume = (volume) => {
     return {
         type: playlistActionType.SET_AUDIO_VOLUME,
-        payload: audio.volume,
+        payload: volume,
     }
 };
 

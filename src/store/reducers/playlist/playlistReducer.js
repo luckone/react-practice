@@ -32,6 +32,7 @@ const playlistReducer = (state = playlistState, action) => {
                 };
             } else return {...state};
         case playlistActionType.SET_AUDIO_VOLUME:
+            if (state.audio) state.audio.volume = action.payload;
             return {
                 ...state,
                 volume: action.payload,

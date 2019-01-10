@@ -55,11 +55,11 @@ class DrawerPlayerComponent extends React.Component {
         menu: null,
     };
 
-    handleChange = (event, value) => {
+    handleSliderChange = (event, value) => {
         this.setState({ sliderTimeValue: value });
     };
 
-    handleDragStop = (value) => {
+    handleSliderDragStop = (value) => {
         this.props.unsetTimeTick();
         this.props.resetAudioCurrentTime(value);
         this.initTimeTick(this.props.audio);
@@ -177,8 +177,8 @@ class DrawerPlayerComponent extends React.Component {
                                         <SliderItem
                                             max={this.props.currentTrackDurationRaw}
                                             value={sliderTimeValue}
-                                            onChange={this.handleChange}
-                                            onDragEnd={() => this.handleDragStop(sliderTimeValue)}/>
+                                            onChange={this.handleSliderChange}
+                                            onDragEnd={() => this.handleSliderDragStop(sliderTimeValue)}/>
                                     </div>
                                     <p className="general-time">
                                         {this.props.currentTrackDuration ? this.props.currentTrackDuration : '00:00'}
